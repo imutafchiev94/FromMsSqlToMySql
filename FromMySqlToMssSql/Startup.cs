@@ -4,6 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
 using FromMySqlToMssSql.Models;
+using FromMySqlToMssSql.OldModels;
+using FromMySqlToMssSql.Services;
+using FromMySqlToMssSql.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,9 +29,14 @@ namespace FromMySqlToMssSql
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddEntityFrameworkSqlServer().AddDbContext<KillSomeTimeContext>();
+            services.AddDbContext<KillSomeTimeContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("newConnectionString")));
+            services.AddDbContext<killsometimeContext>(options =>
+                options.UseMySql(Configuration.GetConnectionString("oldConnectionString")));
 
             services.AddControllersWithViews();
+            //services.AddSingleton<ITransferService, TransferService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

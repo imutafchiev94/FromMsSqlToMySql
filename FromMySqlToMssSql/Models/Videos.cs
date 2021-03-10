@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
+// Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
+// If you have enabled NRTs for your project, then un-comment the following line:
+// #nullable disable
+
 namespace FromMySqlToMssSql.Models
 {
     public partial class Videos
@@ -39,6 +43,7 @@ namespace FromMySqlToMssSql.Models
         public string CreatedByNavigationId { get; set; }
         public string UpdatedByNavigationId { get; set; }
         public int? FeatureIndex { get; set; }
+        public bool? IsXpcalculated { get; set; }
 
         public virtual VideoCategories Category { get; set; }
         public virtual AspNetUsers CreatedByNavigation { get; set; }

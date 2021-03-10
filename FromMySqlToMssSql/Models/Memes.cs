@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
+// Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
+// If you have enabled NRTs for your project, then un-comment the following line:
+// #nullable disable
+
 namespace FromMySqlToMssSql.Models
 {
     public partial class Memes
@@ -8,6 +12,7 @@ namespace FromMySqlToMssSql.Models
         public Memes()
         {
             CopyrightReports = new HashSet<CopyrightReports>();
+            GameRatings = new HashSet<GameRatings>();
             MemeComments = new HashSet<MemeComments>();
             MemeRatings = new HashSet<MemeRatings>();
             MemeTags = new HashSet<MemeTags>();
@@ -37,6 +42,7 @@ namespace FromMySqlToMssSql.Models
         public string CreatedByNavigationId { get; set; }
         public string UpdatedByNavigationId { get; set; }
         public int? FeatureIndex { get; set; }
+        public bool? IsXpcalculated { get; set; }
 
         public virtual AspNetUsers Author { get; set; }
         public virtual AspNetUsers CreatedByNavigation { get; set; }
@@ -44,6 +50,7 @@ namespace FromMySqlToMssSql.Models
         public virtual MemeSections MemeSection { get; set; }
         public virtual AspNetUsers UpdatedByNavigation { get; set; }
         public virtual ICollection<CopyrightReports> CopyrightReports { get; set; }
+        public virtual ICollection<GameRatings> GameRatings { get; set; }
         public virtual ICollection<MemeComments> MemeComments { get; set; }
         public virtual ICollection<MemeRatings> MemeRatings { get; set; }
         public virtual ICollection<MemeTags> MemeTags { get; set; }

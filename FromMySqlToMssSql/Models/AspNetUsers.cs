@@ -1,16 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 
+// Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
+// If you have enabled NRTs for your project, then un-comment the following line:
+// #nullable disable
+
 namespace FromMySqlToMssSql.Models
 {
     public partial class AspNetUsers
     {
         public AspNetUsers()
         {
+            Badges = new HashSet<Badges>();
             BlogsAuthor = new HashSet<Blogs>();
             BlogsCreatedByNavigation = new HashSet<Blogs>();
             BlogsUpdatedByNavigation = new HashSet<Blogs>();
             Feedbacks = new HashSet<Feedbacks>();
+            GameRatingsCreatedByNavigation = new HashSet<GameRatings>();
+            GameRatingsUpdatedByNavigation = new HashSet<GameRatings>();
+            GameRatingsUser = new HashSet<GameRatings>();
             MemeCategoriesCreatedByNavigation = new HashSet<MemeCategories>();
             MemeCategoriesUpdatedByNavigation = new HashSet<MemeCategories>();
             MemeCommentRatingsCreatedByNavigation = new HashSet<MemeCommentRatings>();
@@ -38,7 +46,10 @@ namespace FromMySqlToMssSql.Models
             Reports = new HashSet<Reports>();
             TagsCreatedByNavigation = new HashSet<Tags>();
             TagsUpdatedByNavigation = new HashSet<Tags>();
+            UserAchievements = new HashSet<UserAchievements>();
+            UserBadges = new HashSet<UserBadges>();
             UserClaims = new HashSet<UserClaims>();
+            UserFrames = new HashSet<UserFrames>();
             UserLogins = new HashSet<UserLogins>();
             UserTokens = new HashSet<UserTokens>();
             VideoCategoriesCreatedByNavigation = new HashSet<VideoCategories>();
@@ -90,11 +101,24 @@ namespace FromMySqlToMssSql.Models
         public bool? IsAdmin { get; set; }
         public int UploadLimit { get; set; }
         public bool? IsDeleted { get; set; }
+        public string AccountType { get; set; }
+        public int? FrameId { get; set; }
+        public int LevelId { get; set; }
+        public double QualityRating { get; set; }
+        public double ScrollDistance { get; set; }
+        public int TotalExperience { get; set; }
+        public int DaysInArow { get; set; }
+        public int TotalDaysSpent { get; set; }
+        public int TotalMinutesSpent { get; set; }
 
+        public virtual ICollection<Badges> Badges { get; set; }
         public virtual ICollection<Blogs> BlogsAuthor { get; set; }
         public virtual ICollection<Blogs> BlogsCreatedByNavigation { get; set; }
         public virtual ICollection<Blogs> BlogsUpdatedByNavigation { get; set; }
         public virtual ICollection<Feedbacks> Feedbacks { get; set; }
+        public virtual ICollection<GameRatings> GameRatingsCreatedByNavigation { get; set; }
+        public virtual ICollection<GameRatings> GameRatingsUpdatedByNavigation { get; set; }
+        public virtual ICollection<GameRatings> GameRatingsUser { get; set; }
         public virtual ICollection<MemeCategories> MemeCategoriesCreatedByNavigation { get; set; }
         public virtual ICollection<MemeCategories> MemeCategoriesUpdatedByNavigation { get; set; }
         public virtual ICollection<MemeCommentRatings> MemeCommentRatingsCreatedByNavigation { get; set; }
@@ -122,7 +146,10 @@ namespace FromMySqlToMssSql.Models
         public virtual ICollection<Reports> Reports { get; set; }
         public virtual ICollection<Tags> TagsCreatedByNavigation { get; set; }
         public virtual ICollection<Tags> TagsUpdatedByNavigation { get; set; }
+        public virtual ICollection<UserAchievements> UserAchievements { get; set; }
+        public virtual ICollection<UserBadges> UserBadges { get; set; }
         public virtual ICollection<UserClaims> UserClaims { get; set; }
+        public virtual ICollection<UserFrames> UserFrames { get; set; }
         public virtual ICollection<UserLogins> UserLogins { get; set; }
         public virtual ICollection<UserTokens> UserTokens { get; set; }
         public virtual ICollection<VideoCategories> VideoCategoriesCreatedByNavigation { get; set; }

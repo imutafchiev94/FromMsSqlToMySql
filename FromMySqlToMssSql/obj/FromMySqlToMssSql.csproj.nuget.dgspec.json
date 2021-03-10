@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Work Projects\\FromMySqlToMssSql\\FromMySqlToMssSql\\FromMySqlToMssSql.csproj": {}
+    "C:\\Work Projects\\FromMsSqlToMySql\\FromMySqlToMssSql\\FromMySqlToMssSql.csproj": {}
   },
   "projects": {
-    "C:\\Work Projects\\FromMySqlToMssSql\\FromMySqlToMssSql\\FromMySqlToMssSql.csproj": {
+    "C:\\Work Projects\\FromMsSqlToMySql\\FromMySqlToMssSql\\FromMySqlToMssSql.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Work Projects\\FromMySqlToMssSql\\FromMySqlToMssSql\\FromMySqlToMssSql.csproj",
+        "projectUniqueName": "C:\\Work Projects\\FromMsSqlToMySql\\FromMySqlToMssSql\\FromMySqlToMssSql.csproj",
         "projectName": "FromMySqlToMssSql",
-        "projectPath": "C:\\Work Projects\\FromMySqlToMssSql\\FromMySqlToMssSql\\FromMySqlToMssSql.csproj",
+        "projectPath": "C:\\Work Projects\\FromMsSqlToMySql\\FromMySqlToMssSql\\FromMySqlToMssSql.csproj",
         "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
-        "outputPath": "C:\\Work Projects\\FromMySqlToMssSql\\FromMySqlToMssSql\\obj\\",
+        "outputPath": "C:\\Work Projects\\FromMsSqlToMySql\\FromMySqlToMssSql\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -26,6 +26,7 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
             "projectReferences": {}
           }
         },
@@ -37,30 +38,31 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "dependencies": {
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[3.1.10, )"
+              "version": "[3.1.12, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[3.1.10, )"
+              "version": "[3.1.12, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[3.1.10, )"
+              "version": "[3.1.12, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[3.1.10, )"
+              "version": "[3.1.12, )"
             },
-            "MySql.Data.EntityFrameworkCore": {
+            "Pomelo.EntityFrameworkCore.MySql": {
               "target": "Package",
-              "version": "[8.0.22, )"
+              "version": "[3.2.4, )"
             }
           },
           "imports": [
@@ -81,7 +83,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.403\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
         }
       }
     }

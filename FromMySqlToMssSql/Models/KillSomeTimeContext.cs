@@ -2,6 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
+// Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
+// If you have enabled NRTs for your project, then un-comment the following line:
+// #nullable disable
+
 namespace FromMySqlToMssSql.Models
 {
     public partial class KillSomeTimeContext : DbContext
@@ -15,18 +19,27 @@ namespace FromMySqlToMssSql.Models
         {
         }
 
+        public virtual DbSet<AchievementCategories> AchievementCategories { get; set; }
+        public virtual DbSet<Achievements> Achievements { get; set; }
         public virtual DbSet<AggregatedCounter> AggregatedCounter { get; set; }
         public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
+        public virtual DbSet<Badges> Badges { get; set; }
         public virtual DbSet<Blogs> Blogs { get; set; }
+        public virtual DbSet<BookmarkedMemes> BookmarkedMemes { get; set; }
+        public virtual DbSet<BookmarkedVideos> BookmarkedVideos { get; set; }
         public virtual DbSet<CopyrightReports> CopyrightReports { get; set; }
         public virtual DbSet<Counter> Counter { get; set; }
         public virtual DbSet<Feedbacks> Feedbacks { get; set; }
         public virtual DbSet<FooterPages> FooterPages { get; set; }
+        public virtual DbSet<Frames> Frames { get; set; }
+        public virtual DbSet<GameRatings> GameRatings { get; set; }
+        public virtual DbSet<Games> Games { get; set; }
         public virtual DbSet<Hash> Hash { get; set; }
         public virtual DbSet<Job> Job { get; set; }
         public virtual DbSet<JobParameter> JobParameter { get; set; }
         public virtual DbSet<JobQueue> JobQueue { get; set; }
+        public virtual DbSet<Levels> Levels { get; set; }
         public virtual DbSet<List> List { get; set; }
         public virtual DbSet<MemeCategories> MemeCategories { get; set; }
         public virtual DbSet<MemeCommentRatings> MemeCommentRatings { get; set; }
@@ -47,8 +60,13 @@ namespace FromMySqlToMssSql.Models
         public virtual DbSet<Set> Set { get; set; }
         public virtual DbSet<State> State { get; set; }
         public virtual DbSet<Tags> Tags { get; set; }
+        public virtual DbSet<TimeCoinsTransactions> TimeCoinsTransactions { get; set; }
+        public virtual DbSet<UserAchievements> UserAchievements { get; set; }
+        public virtual DbSet<UserBadges> UserBadges { get; set; }
         public virtual DbSet<UserClaims> UserClaims { get; set; }
+        public virtual DbSet<UserFrames> UserFrames { get; set; }
         public virtual DbSet<UserLogins> UserLogins { get; set; }
+        public virtual DbSet<UserRewards> UserRewards { get; set; }
         public virtual DbSet<UserRoles> UserRoles { get; set; }
         public virtual DbSet<UserTokens> UserTokens { get; set; }
         public virtual DbSet<VideoCategories> VideoCategories { get; set; }
@@ -71,6 +89,38 @@ namespace FromMySqlToMssSql.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<AchievementCategories>(entity =>
+            {
+                entity.Property(e => e.IsDeleted)
+                    .IsRequired()
+                    .HasDefaultValueSql("(CONVERT([bit],(0)))");
+            });
+
+            modelBuilder.Entity<Achievements>(entity =>
+            {
+                entity.HasIndex(e => e.AchievementCategoryId);
+
+                entity.HasIndex(e => e.BadgeId);
+
+                entity.HasIndex(e => e.FrameId);
+
+                entity.Property(e => e.IsDeleted)
+                    .IsRequired()
+                    .HasDefaultValueSql("(CONVERT([bit],(0)))");
+
+                entity.HasOne(d => d.AchievementCategory)
+                    .WithMany(p => p.Achievements)
+                    .HasForeignKey(d => d.AchievementCategoryId);
+
+                entity.HasOne(d => d.Badge)
+                    .WithMany(p => p.Achievements)
+                    .HasForeignKey(d => d.BadgeId);
+
+                entity.HasOne(d => d.Frame)
+                    .WithMany(p => p.Achievements)
+                    .HasForeignKey(d => d.FrameId);
+            });
+
             modelBuilder.Entity<AggregatedCounter>(entity =>
             {
                 entity.HasKey(e => e.Key)
@@ -109,6 +159,8 @@ namespace FromMySqlToMssSql.Models
                     .IsUnique()
                     .HasFilter("([NormalizedUserName] IS NOT NULL)");
 
+                entity.Property(e => e.DaysInArow).HasColumnName("DaysInARow");
+
                 entity.Property(e => e.Email).HasMaxLength(256);
 
                 entity.Property(e => e.IsAdmin)
@@ -125,6 +177,19 @@ namespace FromMySqlToMssSql.Models
                 entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
 
                 entity.Property(e => e.UserName).HasMaxLength(256);
+            });
+
+            modelBuilder.Entity<Badges>(entity =>
+            {
+                entity.HasIndex(e => e.AspNetUsersId);
+
+                entity.Property(e => e.IsDeleted)
+                    .IsRequired()
+                    .HasDefaultValueSql("(CONVERT([bit],(0)))");
+
+                entity.HasOne(d => d.AspNetUsers)
+                    .WithMany(p => p.Badges)
+                    .HasForeignKey(d => d.AspNetUsersId);
             });
 
             modelBuilder.Entity<Blogs>(entity =>
@@ -207,6 +272,45 @@ namespace FromMySqlToMssSql.Models
                     .HasDefaultValueSql("(CONVERT([bit],(0)))");
 
                 entity.Property(e => e.UpdatedAt).HasDefaultValueSql("('0001-01-01T00:00:00.0000000')");
+            });
+
+            modelBuilder.Entity<Frames>(entity =>
+            {
+                entity.Property(e => e.IsDeleted)
+                    .IsRequired()
+                    .HasDefaultValueSql("(CONVERT([bit],(0)))");
+            });
+
+            modelBuilder.Entity<GameRatings>(entity =>
+            {
+                entity.HasIndex(e => e.CreatedByNavigationId);
+
+                entity.HasIndex(e => e.MemeId);
+
+                entity.HasIndex(e => e.UpdatedByNavigationId);
+
+                entity.HasIndex(e => e.UserId);
+
+                entity.HasOne(d => d.CreatedByNavigation)
+                    .WithMany(p => p.GameRatingsCreatedByNavigation)
+                    .HasForeignKey(d => d.CreatedByNavigationId);
+
+                entity.HasOne(d => d.Meme)
+                    .WithMany(p => p.GameRatings)
+                    .HasForeignKey(d => d.MemeId);
+
+                entity.HasOne(d => d.UpdatedByNavigation)
+                    .WithMany(p => p.GameRatingsUpdatedByNavigation)
+                    .HasForeignKey(d => d.UpdatedByNavigationId);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.GameRatingsUser)
+                    .HasForeignKey(d => d.UserId);
+            });
+
+            modelBuilder.Entity<Games>(entity =>
+            {
+                entity.Property(e => e.TimesPlayed).HasColumnName("TimesPLayed");
             });
 
             modelBuilder.Entity<Hash>(entity =>
@@ -349,6 +453,10 @@ namespace FromMySqlToMssSql.Models
 
                 entity.HasIndex(e => e.UserId);
 
+                entity.Property(e => e.IsXpCalculated)
+                    .IsRequired()
+                    .HasDefaultValueSql("(CONVERT([bit],(0)))");
+
                 entity.HasOne(d => d.CreatedByNavigation)
                     .WithMany(p => p.MemeCommentsCreatedByNavigation)
                     .HasForeignKey(d => d.CreatedByNavigationId);
@@ -379,6 +487,10 @@ namespace FromMySqlToMssSql.Models
                 entity.HasIndex(e => e.UpdatedByNavigationId);
 
                 entity.HasIndex(e => e.UserId);
+
+                entity.Property(e => e.IsXpCalculated)
+                    .IsRequired()
+                    .HasDefaultValueSql("(CONVERT([bit],(0)))");
 
                 entity.HasOne(d => d.CreatedByNavigation)
                     .WithMany(p => p.MemeRatingsCreatedByNavigation)
@@ -477,6 +589,11 @@ namespace FromMySqlToMssSql.Models
                 entity.HasIndex(e => e.MemeSectionId);
 
                 entity.HasIndex(e => e.UpdatedByNavigationId);
+
+                entity.Property(e => e.IsXpcalculated)
+                    .IsRequired()
+                    .HasColumnName("IsXPCalculated")
+                    .HasDefaultValueSql("(CONVERT([bit],(0)))");
 
                 entity.HasOne(d => d.Author)
                     .WithMany(p => p.MemesAuthor)
@@ -677,6 +794,43 @@ namespace FromMySqlToMssSql.Models
                     .HasForeignKey(d => d.UpdatedByNavigationId);
             });
 
+            modelBuilder.Entity<TimeCoinsTransactions>(entity =>
+            {
+                entity.Property(e => e.IsDeleted)
+                    .IsRequired()
+                    .HasDefaultValueSql("(CONVERT([bit],(0)))");
+            });
+
+            modelBuilder.Entity<UserAchievements>(entity =>
+            {
+                entity.HasIndex(e => e.AchievementId);
+
+                entity.HasIndex(e => e.UserId);
+
+                entity.HasOne(d => d.Achievement)
+                    .WithMany(p => p.UserAchievements)
+                    .HasForeignKey(d => d.AchievementId);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserAchievements)
+                    .HasForeignKey(d => d.UserId);
+            });
+
+            modelBuilder.Entity<UserBadges>(entity =>
+            {
+                entity.HasIndex(e => e.BadgeId);
+
+                entity.HasIndex(e => e.UserId);
+
+                entity.HasOne(d => d.Badge)
+                    .WithMany(p => p.UserBadges)
+                    .HasForeignKey(d => d.BadgeId);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserBadges)
+                    .HasForeignKey(d => d.UserId);
+            });
+
             modelBuilder.Entity<UserClaims>(entity =>
             {
                 entity.HasIndex(e => e.UserId);
@@ -687,6 +841,21 @@ namespace FromMySqlToMssSql.Models
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.UserClaims)
+                    .HasForeignKey(d => d.UserId);
+            });
+
+            modelBuilder.Entity<UserFrames>(entity =>
+            {
+                entity.HasIndex(e => e.FrameId);
+
+                entity.HasIndex(e => e.UserId);
+
+                entity.HasOne(d => d.Frame)
+                    .WithMany(p => p.UserFrames)
+                    .HasForeignKey(d => d.FrameId);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserFrames)
                     .HasForeignKey(d => d.UserId);
             });
 
@@ -701,6 +870,13 @@ namespace FromMySqlToMssSql.Models
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.UserLogins)
                     .HasForeignKey(d => d.UserId);
+            });
+
+            modelBuilder.Entity<UserRewards>(entity =>
+            {
+                entity.Property(e => e.IsDeleted)
+                    .IsRequired()
+                    .HasDefaultValueSql("(CONVERT([bit],(0)))");
             });
 
             modelBuilder.Entity<UserRoles>(entity =>
@@ -783,6 +959,10 @@ namespace FromMySqlToMssSql.Models
 
                 entity.HasIndex(e => e.VideoId);
 
+                entity.Property(e => e.IsXpCalculated)
+                    .IsRequired()
+                    .HasDefaultValueSql("(CONVERT([bit],(0)))");
+
                 entity.HasOne(d => d.Author)
                     .WithMany(p => p.VideoCommentsAuthor)
                     .HasForeignKey(d => d.AuthorId);
@@ -813,6 +993,10 @@ namespace FromMySqlToMssSql.Models
                 entity.HasIndex(e => e.UserId);
 
                 entity.HasIndex(e => e.VideoId);
+
+                entity.Property(e => e.IsXpCalculated)
+                    .IsRequired()
+                    .HasDefaultValueSql("(CONVERT([bit],(0)))");
 
                 entity.HasOne(d => d.CreatedByNavigation)
                     .WithMany(p => p.VideoRatingsCreatedByNavigation)
@@ -909,6 +1093,11 @@ namespace FromMySqlToMssSql.Models
                 entity.HasIndex(e => e.UserId);
 
                 entity.HasIndex(e => e.VideoSectionId);
+
+                entity.Property(e => e.IsXpcalculated)
+                    .IsRequired()
+                    .HasColumnName("IsXPCalculated")
+                    .HasDefaultValueSql("(CONVERT([bit],(0)))");
 
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Videos)

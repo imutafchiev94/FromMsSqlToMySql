@@ -2,20 +2,25 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>2dfaa82d-4aa3-4d12-81b3-d418b7b129fb</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.10">
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.12">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.10">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.12">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.22" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.2.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="OldModels\" />
   </ItemGroup>
 
 </Project>

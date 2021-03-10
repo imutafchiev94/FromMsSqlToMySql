@@ -11,6 +11,7 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("2dfaa82d-4aa3-4d12-81b3-d418b7b129fb")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("FromMySqlToMssSql")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
