@@ -43,7 +43,7 @@ namespace FromMySqlToMssSql.OldModels
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseMySql("server=localhost;port=4021;database=killsometime;uid=user;pwd=Password_1234;convertzerodatetime=true", x => x.ServerVersion("8.0.23-mysql"));
+                optionsBuilder.UseMySql("server=localhost;port=4021;database=realkillsometime;uid=user;pwd=Password_1234;convertzerodatetime=true", x => x.ServerVersion("8.0.23-mysql"));
             }
         }
 

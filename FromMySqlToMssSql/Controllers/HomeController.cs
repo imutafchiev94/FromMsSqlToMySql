@@ -18,14 +18,14 @@ namespace FromMySqlToMssSql.Controllers
     {
         private readonly KillSomeTimeContext _newDbContext;
         private readonly killsometimeContext _oldDbContext;
-        private readonly UserManager<AspNetUsers> _userManager;
+        //private readonly UserManager<AspNetUsers> _userManager;
 
 
-        public HomeController(KillSomeTimeContext newDbContext, killsometimeContext oldDbContext, UserManager<AspNetUsers> userManager)
+        public HomeController(KillSomeTimeContext newDbContext, killsometimeContext oldDbContext/*, UserManager<AspNetUsers> userManager*/)
         {
             _newDbContext = newDbContext;
             _oldDbContext = oldDbContext;
-            _userManager = userManager;
+            //_userManager = userManager;
         }
 
         public IActionResult Index()
@@ -45,7 +45,7 @@ namespace FromMySqlToMssSql.Controllers
             TransferMemeCategory();
             TransferMemeSection();
             TransferMemes();
-            TransferTag();
+            //TransferTag();
             TransferMemeTag();
             TransferMemeComment();
             TransferMemeRating();
@@ -56,8 +56,8 @@ namespace FromMySqlToMssSql.Controllers
             TransferVideoComment();
             TransferVideoRating();
             TransferFeedback();
-            TransferRedirects();
-            TransferReports();
+            //TransferRedirects();
+            //TransferReports();
 
         }
 
@@ -96,6 +96,8 @@ namespace FromMySqlToMssSql.Controllers
                         DateOfBirth = oldUser.DateOfBirth,
                         CreatedAt = oldUser.CreatedAt,
                         UpdatedAt = oldUser.UpdatedAt,
+                        SecurityStamp = Guid.NewGuid().ToString("D"),
+                        ConcurrencyStamp = Guid.NewGuid().ToString(),
                         LevelId = 0,
                         ScrollDistance = 0,
                         TotalExperience = 0,
@@ -179,7 +181,7 @@ namespace FromMySqlToMssSql.Controllers
 
             foreach (var oldMeme in oldMemes)
             {
-                var findMeme = _newDbContext.Memes.FirstOrDefault(m => m.Title == oldMeme.Title);
+                var findMeme = _newDbContext.Memes.FirstOrDefault(m => m.Slug == oldMeme.Slug);
 
                 if (findMeme == null)
                 {
@@ -269,23 +271,48 @@ namespace FromMySqlToMssSql.Controllers
 
             foreach (var oldMemeRating in oldMemeRatings)
             {
-                var author = _newDbContext.AspNetUsers.FirstOrDefault(u => u.UserName == oldMemeRating.Author.Username);
-                var meme = _newDbContext.Memes.FirstOrDefault(m => m.Title == oldMemeRating.Meme.Title);
-                var findMemeRating = newMemeRatings.FirstOrDefault(mr =>
-                    oldMemeRating.Author.Username == author.UserName && oldMemeRating.Meme.Title == meme.Title);
-                if (findMemeRating == null)
-                {
-                    var newMemeRating = new MemeRatings()
-                    {
-                        MemeId = meme.Id,
-                        UserId = author.Id,
-                        Rate = oldMemeRating.Vote,
-                        CreatedAt = oldMemeRating.CreatedAt,
-                        UpdatedAt = oldMemeRating.UpdatedAt
-                    };
 
-                    _newDbContext.MemeRatings.Add(newMemeRating);
-                    _newDbContext.SaveChanges();
+                if (oldMemeRating.AuthorId != null)
+                {
+                    var author = _newDbContext.AspNetUsers.FirstOrDefault(u => u.UserName == oldMemeRating.Author.Username);
+                    var meme = _newDbContext.Memes.FirstOrDefault(m => m.Title == oldMemeRating.Meme.Title);
+                    var findMemeRating = newMemeRatings.FirstOrDefault(mr =>
+                        oldMemeRating.Author.Username == author.UserName && oldMemeRating.Meme.Title == meme.Title);
+                    if (findMemeRating == null)
+                    {
+                        var newMemeRating = new MemeRatings()
+                        {
+                            MemeId = meme.Id,
+                            UserId = author.Id,
+                            Rate = oldMemeRating.Vote,
+                            CreatedAt = oldMemeRating.CreatedAt,
+                            UpdatedAt = oldMemeRating.UpdatedAt
+                        };
+
+                        _newDbContext.MemeRatings.Add(newMemeRating);
+                        _newDbContext.SaveChanges();
+                    }
+                }
+                else
+                {
+                    var author = "Anonymous";
+                    var meme = _newDbContext.Memes.FirstOrDefault(m => m.Title == oldMemeRating.Meme.Title);
+                    var findMemeRating = newMemeRatings.FirstOrDefault(mr =>
+                        oldMemeRating.AuthorId == null && oldMemeRating.Meme.Title == meme.Title);
+                    if (findMemeRating == null)
+                    {
+                        var newMemeRating = new MemeRatings()
+                        {
+                            MemeId = meme.Id,
+                            UserId = null,
+                            Rate = oldMemeRating.Vote,
+                            CreatedAt = oldMemeRating.CreatedAt,
+                            UpdatedAt = oldMemeRating.UpdatedAt
+                        };
+
+                        _newDbContext.MemeRatings.Add(newMemeRating);
+                        _newDbContext.SaveChanges();
+                    }
                 }
             }
         }
@@ -299,9 +326,9 @@ namespace FromMySqlToMssSql.Controllers
             {
                 var author = _newDbContext.AspNetUsers.FirstOrDefault(u => u.UserName == oldMemeComment.Author.Username);
                 var meme = _newDbContext.Memes.FirstOrDefault(m => m.Title == oldMemeComment.Meme.Title);
-                var findMemeComment = oldMemeComments.FirstOrDefault(mr =>
+                var findMemeComment = newMemeComments.FirstOrDefault(mr =>
                     oldMemeComment.Author.Username == author.UserName && oldMemeComment.Meme.Title == meme.Title);
-                if (oldMemeComment == null)
+                if (findMemeComment == null)
                 {
                     var newMemeComment = new MemeComments()
                     {
@@ -427,7 +454,7 @@ namespace FromMySqlToMssSql.Controllers
 
             foreach (var oldVideo in oldVideos)
             {
-                var findVideo = _newDbContext.Videos.FirstOrDefault(m => m.Title == oldVideo.Title);
+                var findVideo = _newDbContext.Videos.FirstOrDefault(m => m.Slug == oldVideo.Slug);
 
                 if (findVideo == null)
                 {
@@ -491,24 +518,49 @@ namespace FromMySqlToMssSql.Controllers
 
             foreach (var oldVideoRating in oldVideoRatings)
             {
-                var author = _newDbContext.AspNetUsers.FirstOrDefault(u => u.UserName == oldVideoRating.Author.Username);
-                var video = _newDbContext.Videos.FirstOrDefault(m => m.Title == oldVideoRating.Video.Title);
-                var findVideoRating = newVideoRatings.FirstOrDefault(mr =>
-                    oldVideoRating.Author.Username == author.UserName && oldVideoRating.Video.Title == video.Title);
-                if (findVideoRating == null)
+                if (oldVideoRating.AuthorId != null)
                 {
-                    var newVideoRating = new VideoRatings()
+                    var author = _newDbContext.AspNetUsers.FirstOrDefault(u => u.UserName == oldVideoRating.Author.Username);
+                    var video = _newDbContext.Videos.FirstOrDefault(m => m.Title == oldVideoRating.Video.Title);
+                    var findVideoRating = newVideoRatings.FirstOrDefault(mr =>
+                        oldVideoRating.Author.Username == author.UserName && oldVideoRating.Video.Title == video.Title);
+                    if (findVideoRating == null)
                     {
-                        VideoId = video.Id,
-                        UserId = author.Id,
-                        Rate = oldVideoRating.Vote,
-                        CreatedAt = oldVideoRating.CreatedAt,
-                        UpdatedAt = oldVideoRating.UpdatedAt
-                    };
+                        var newVideoRating = new VideoRatings()
+                        {
+                            VideoId = video.Id,
+                            UserId = author.Id,
+                            Rate = oldVideoRating.Vote,
+                            CreatedAt = oldVideoRating.CreatedAt,
+                            UpdatedAt = oldVideoRating.UpdatedAt
+                        };
 
-                    _newDbContext.VideoRatings.Add(newVideoRating);
-                    _newDbContext.SaveChanges();
+                        _newDbContext.VideoRatings.Add(newVideoRating);
+                        _newDbContext.SaveChanges();
+                    }
                 }
+                else
+                {
+                    var author = "Anonymous";
+                    var video = _newDbContext.Videos.FirstOrDefault(m => m.Title == oldVideoRating.Video.Title);
+                    var findVideoRating = newVideoRatings.FirstOrDefault(mr =>
+                        oldVideoRating.Author == null && oldVideoRating.Video.Title == video.Title);
+                    if (findVideoRating == null)
+                    {
+                        var newVideoRating = new VideoRatings()
+                        {
+                            VideoId = video.Id,
+                            UserId = null,
+                            Rate = oldVideoRating.Vote,
+                            CreatedAt = oldVideoRating.CreatedAt,
+                            UpdatedAt = oldVideoRating.UpdatedAt
+                        };
+
+                        _newDbContext.VideoRatings.Add(newVideoRating);
+                        _newDbContext.SaveChanges();
+                    }
+                }
+                
             }
         }
 
@@ -521,7 +573,7 @@ namespace FromMySqlToMssSql.Controllers
             {
                 var author = _newDbContext.AspNetUsers.FirstOrDefault(u => u.UserName == oldVideoComment.Author.Username);
                 var video = _newDbContext.Videos.FirstOrDefault(m => m.Title == oldVideoComment.Video.Title);
-                var findVideoComment = oldVideoComments.FirstOrDefault(mr =>
+                var findVideoComment = newVideoComments.FirstOrDefault(mr =>
                     oldVideoComment.Author.Username == author.UserName && oldVideoComment.Video.Title == video.Title);
                 if (findVideoComment == null)
                 {
