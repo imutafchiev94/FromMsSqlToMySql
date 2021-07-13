@@ -80,11 +80,6 @@ namespace FromMySqlToMssSql.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=192.168.0.140;Database=KillSomeTime;User=sa;Password=q123456q;MultipleActiveResultSets=true");
-            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

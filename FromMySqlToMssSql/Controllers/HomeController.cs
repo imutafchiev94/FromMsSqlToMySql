@@ -41,24 +41,45 @@ namespace FromMySqlToMssSql.Controllers
         [HttpGet]
         public void Transfer()
         {
-            TransferUsers();
-            TransferMemeCategory();
-            TransferMemeSection();
-            TransferMemes();
+
+            TransferThumbnails();
+            //TransferUsers();
+            //TransferMemeCategory();
+            //TransferMemeSection();
+            //TransferMemes();
             //TransferTag();
-            TransferMemeTag();
-            TransferMemeComment();
-            TransferMemeRating();
-            TransferVideoCategory();
-            TransferVideoSection();
-            TransferVideo();
-            TransferVideoTag();
-            TransferVideoComment();
-            TransferVideoRating();
-            TransferFeedback();
+            //TransferMemeTag();
+            //TransferMemeComment();
+            //TransferMemeRating();
+            //TransferVideoCategory();
+            //TransferVideoSection();
+            //TransferVideo();
+            //TransferVideoTag();
+            //TransferVideoComment();
+            //TransferVideoRating();
+            //TransferFeedback();
             //TransferRedirects();
             //TransferReports();
 
+        }
+
+        private void TransferThumbnails()
+        {
+            var oldVideos = _oldDbContext.Video.ToList();
+            var newVideos = _newDbContext.Videos.ToList();
+
+            foreach (var oldVideo in oldVideos)
+            {
+                var findVideo = _newDbContext.Videos.FirstOrDefault(m => m.Slug == oldVideo.Slug);
+
+                if (findVideo != null)
+                {
+                    findVideo.Thumbnail = oldVideo.ThumbnailPath;
+                    _newDbContext.Videos.Update(findVideo);
+                }
+            }
+
+            _newDbContext.SaveChanges();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
